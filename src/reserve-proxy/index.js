@@ -5,7 +5,10 @@ var httpProxy = require('http-proxy')
 var fs = require('fs')
 var path = require('path')
 
-function setProxy (req, res, proxy, config) {
+var DEFAULT_PROXY_OPTIONS = {}
+var DEFAULT_HTTP_OPTIONS = {}
+
+function configServerProxy (req, res, proxy, config) {
   var matched = false
   var domain = req.headers.host
 
@@ -18,50 +21,64 @@ function setProxy (req, res, proxy, config) {
       break
     }
   }
-  if (!matched) {
-    proxy.web(req, res, {target: config.target})
+  if (!matched && config.defaultTarget) {
+    proxy.web(req, res, {target: config.defaultTarget})
   }
 }
 
-function startProxyServer (config, name) {
-  var proxyOptions = config.proxyOptions || {}
+function handleProxy (proxy, proxyHandler) {
+  proxy.on('error', function (err, req, res) {
+    console.log(req.headers.host + 'err')
+    res.end('Something went wrong. And we are reporting a custom error message.');
+  })
+
+  proxyHandler && proxyHandler(proxy)
+}
+
+function createServer (ssl, httpOptions, requestListener) {
+  if (ssl) {
+    return https.createServer(httpOptions, requestListener)
+  } else {
+    return http.createServer(requestListener)
+  }
+}
+
+function startServer (name, config, messageHandler) {
+  var server = createServer(config.ssl, config.httpOptions, messageHandler)
+  var ports = config.listen
+
+  ports = Object.prototype.toString.call(ports) === '[object Array]' ?
+    ports :
+    [ports]
+
+  ports.map(function (port) {
+    console.log('Server ' + name + ` Listening at http${config.ssl ? 's' : ''}://localhost:` + port + '\n')
+    server.listen(port)
+  })
+}
+
+function startProxyServer (name, config) {
+  var proxyOptions = config.proxyOptions || DEFAULT_PROXY_OPTIONS
   var proxy = httpProxy.createProxyServer(proxyOptions)
 
-  var httpOptions = config.httpOptions || {}
-
-  var server
-  var ports = Object.prototype.toString.call(config.listen) === '[object Array]' ?
-    config.listen : [config.listen]
-
+  config.httpOptions = config.httpOptions || DEFAULT_HTTP_OPTIONS
   if (config.ssl) {
-    Object.assign(httpOptions, {
+    Object.assign(config.httpOptions, {
       key: fs.readFileSync(config.sslKey || path.join(__dirname, '../secure/server.key'), 'utf8'),
       cert: fs.readFileSync(config.sslCert || path.join(__dirname, '../secure/server.crt'), 'utf8')
     })
-
-    server = https.createServer(httpOptions, function (req, res) {
-      setProxy(req, res, proxy, config)
-    })
-
-    ports.map(function (port) {
-      console.log('Server ' + name + ' Listening at https://localhost:' + port + '\n')
-      server.listen(port)
-    })
-  } else {
-    server = http.createServer(function (req, res) {
-      setProxy(req, res, proxy, config)
-    })
-
-    ports.map(function (port) {
-      console.log('Server ' + name + ' Listening at http://localhost:' + port + '\n')
-      server.listen(port)
-    })
   }
+
+  handleProxy(proxy)
+
+  startServer(name, config, function (req, res) {
+    config.messageHandler && config.messageHandler(req, res)
+    configServerProxy(req, res, proxy, config)
+  })
 }
 
 module.exports = function start (configs) {
-  for (var key in configs) {
-    var config = configs[key]
-    startProxyServer(config, key)
+  for (var name in configs) {
+    startProxyServer(name, configs[name])
   }
 }

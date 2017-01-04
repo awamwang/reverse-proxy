@@ -1,12 +1,14 @@
 module.exports = {
-  1: {
+  'http': {
     listen: 80,
-    target: 'http://127.0.0.1:8083',
+    defaultTarget: 'http://127.0.0.1:8083',
     ssl: false,
     httpOptions: {
     },
     proxyOptions: {
     },
+    messageHandler: function () {},
+    proxyHandler: function () {},
     proxyTable: [
       {
         origin: /niwodai.wm.dev.echo58.com/,
@@ -18,14 +20,16 @@ module.exports = {
       }
     ]
   },
-  2: {
+  'https': {
     listen: 443,
-    target: 'http://127.0.0.1:8082',
+    defaultTarget: 'http://127.0.0.1:8082',
     ssl: true,
     httpOptions: {
     },
     proxyOptions: {
     },
+    messageHandler: function () {},
+    proxyHandler: function () {},
     proxyTable: [
       {
         origin: /niwodais.wm.dev.echo58.com/,
