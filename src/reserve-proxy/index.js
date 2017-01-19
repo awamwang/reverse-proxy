@@ -15,7 +15,9 @@ function configServerProxy (req, res, proxy, config) {
   for (var i = 0, len = config.proxyTable.length; i < len; i++) {
     var item = config.proxyTable[i]
 
-    if (item.origin.test(domain)) {
+    let originRegExp = item.origin instanceof RegExp ? item.origin : new RegExp(item.origin)
+
+    if (originRegExp.test(domain)) {
       proxy.web(req, res, {target: item.target})
       matched = true
       break
@@ -28,7 +30,7 @@ function configServerProxy (req, res, proxy, config) {
 
 function handleProxy (proxy, proxyHandler) {
   proxy.on('error', function (err, req, res) {
-    console.log(req.headers.host + 'err')
+    console.log(req.headers.host + ' err')
     res.end('Something went wrong. And we are reporting a custom error message.');
   })
 
