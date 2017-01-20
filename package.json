@@ -1,7 +1,7 @@
 {
   "name": "reverse-proxy",
   "version": "1.0.0",
-  "description": "",
+  "description": "## 概述",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,8 +10,17 @@
   "bin": {
     "rps": "./bin/index.js"
   },
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "reverse",
+    "proxy",
+    "develop",
+    "tools",
+    "反向代理",
+    "开发",
+    "工具"
+  ],
+  "author": "wangnew2013@126.com",
+  "license": "MIT",
   "dependencies": {
     "ansi-escape-sequences": "^3.0.0",
     "array-back": "^1.0.4",
@@ -21,5 +30,13 @@
     "commander": "^2.9.0",
     "config-master": "^2.0.4",
     "http-proxy": "^1.16.2"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://git.coding.net/wangnew2013/reverse-proxy.git"
   }
 }
