@@ -1,5 +1,5 @@
 {
-  "name": "reverse-proxy",
+  "name": "reverse-proxy-server",
   "version": "1.0.0",
   "description": "## 概述",
   "main": "index.js",
