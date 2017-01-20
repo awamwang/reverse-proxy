@@ -1,5 +1,7 @@
 # reverse-proxy
 
+> 开发用的node.js反向代理reverse-proxy工具
+
 ## 概述
 
 主要作用是在node环境下完成http请求的代理，更多考虑的是反向代理，正向代理http-proxy本身就可以比较轻松的配置。
