@@ -1,17 +1,26 @@
 {
-  "name": "reverse-proxy",
+  "name": "reverse-proxy-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "## 概述",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "ssl": "openssl genrsa -des3 -passout pass:x -out server.pass.key 2048 && openssl rsa -passin pass:x -in server.pass.key -out server.key && openssl req -new -key server.key -out server.csr && openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt && del server.pass.key server.csr"
   },
   "bin": {
-    "reversep": "./bin/index.js"
+    "rps": "./bin/index.js"
   },
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "reverse",
+    "proxy",
+    "develop",
+    "tools",
+    "反向代理",
+    "开发",
+    "工具"
+  ],
+  "author": "wangnew2013@126.com",
+  "license": "MIT",
   "dependencies": {
     "ansi-escape-sequences": "^3.0.0",
     "array-back": "^1.0.4",
@@ -21,5 +30,13 @@
     "commander": "^2.9.0",
     "config-master": "^2.0.4",
     "http-proxy": "^1.16.2"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://git.coding.net/wangnew2013/reverse-proxy.git"
   }
 }
