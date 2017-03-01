@@ -1,4 +1,7 @@
-# reverse-proxy
+# reverse-proxy-server
+一个JavaScript的反向代理实现；方便开发过程
+
+> 开发用的node.js反向代理reverse-proxy工具
 
 ## 概述
 
