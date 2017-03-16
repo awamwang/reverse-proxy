@@ -23,6 +23,9 @@ program
     case 'start':
       start()
       break
+    case 'stop':
+      stop()
+      break
     default:
       start()
   }
