@@ -17,6 +17,7 @@ program
 .arguments('<operation>')
 .option('-c, --config <config>', 'The config file')
 .option('-s, --server <server>', 'The server config')
+.option('-d, --debug <debug>', 'The debug mode')
 // .option('-p, --password <password>', 'The user\'s password')
 .action(function(operation) {
   switch (operation) {
