@@ -56,6 +56,12 @@ function startServer (name, config, messageHandler) {
   ports.map(function (port) {
     console.log('Server ' + name + ` Listening at http${config.ssl ? 's' : ''}://localhost:` + port + '\n')
     server.listen(port)
+
+    if (config.debug) {
+      server.on('request', (request, response) => {
+        console.log(request.headers.host)
+      })
+    }
   })
 }
 
